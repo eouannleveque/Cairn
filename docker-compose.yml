@@ -1,0 +1,40 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      - mysql
+      - redis
+      - mailhog
+    volumes:
+      - ./storage:/var/www/html/storage
+
+  mysql:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: apps_a_la_con
+      MARIADB_USER: laravel
+      MARIADB_PASSWORD: change_me
+      MARIADB_ROOT_PASSWORD: change_me_root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:7-alpine
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025" # interface web pour voir les mails envoyes en dev
+
+volumes:
+  mysql_data:
