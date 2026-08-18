@@ -1,0 +1,12 @@
+{
+    "slug": "calendar",
+    "name": "Calendrier",
+    "icon": "calendar",
+    "description": "Calendrier partagé : créer des événements et inviter d'autres utilisateurs de la plateforme (interne uniquement).",
+    "provider": "App\\Modules\\Calendar\\CalendarServiceProvider",
+    "instance": "App\\Modules\\Calendar\\CalendarModule",
+    "default_points": {
+        "event_created": 0,
+        "invite_accepted": 1
+    }
+}
