@@ -1,10 +1,3 @@
-# Apps à la con — socle Laravel
-
-Ce zip contient le **socle applicatif** (pas un projet Laravel complet généré) : migrations, modèles,
-système de modules, module Weed Count complet, et toute la config Docker/Pterodactyl.
-Je n'ai pas accès à `packagist.org` depuis mon environnement pour générer le squelette Laravel
-complet (`vendor/`, fichiers de base), donc voici comment assembler le tout chez toi (10 min).
-
 ## 1. Créer le squelette Laravel et fusionner ces fichiers
 
 ```bash
@@ -141,27 +134,3 @@ Admin → Eggs → Import).
   fine RGB), widget de stats agrégées multi-apps, boutique de récompenses avec échange de points
 - ✅ **Layout principal** avec navbar générée dynamiquement (uniquement les apps auxquelles
   l'utilisateur a accès) + injection des couleurs de thème en CSS variables
-
-## À faire pour finaliser le socle
-
-1. **Enregistrer les providers** dans `bootstrap/providers.php` :
-   `App\Providers\DynamicMailServiceProvider::class` (en plus de `WeedCountServiceProvider`,
-   `CalendarServiceProvider`, `LiveLocationServiceProvider` et `AppServiceProvider`, voir §2 plus haut).
-2. **Ressource Filament `User`** : gestion des rôles et reset manuel du solde de points depuis l'admin
-   (pas encore fait).
-3. **Design system Cairn** : le layout utilise des classes Tailwind génériques (`btn-primary`,
-   `btn-secondary`) + les CSS variables de thème. À styliser plus finement avec la charte du logo
-   (fond sombre `#14170F`, cartes `#1D2116`, bordures `#333826`) si tu veux un habillage plus poussé
-   que juste les couleurs perso utilisateur.
-4. **Prochaines apps** : créer un nouveau module sur le modèle de `app/Modules/WeedCount` (manifest
-   `module.json`, migrations, `ModuleContract`, Livewire, vues), puis l'enregistrer dans
-   `bootstrap/providers.php` et via `AppModule::create(['slug' => ...])`.
-5. **Position en direct — passage en websockets (optionnel)** : la carte se rafraîchit actuellement
-   par polling (`wire:poll.10s`), suffisant pour un usage interne modeste. Pour une vraie latence
-   temps réel, remplacer par Laravel Reverb (déjà auto-hébergeable, pas de service tiers) + un event
-   broadcast `LocationUpdated` écouté côté client — je peux le faire si le polling s'avère trop lent
-   à l'usage.
-6. **RGPD / rétention** : `live_locations` ne garde que la dernière position (pas d'historique), et
-   `location_shares` est purement opt-in par l'utilisateur qui partage. Si tu veux un log d'audit
-   (qui a vu la position de qui, quand), il faudra une table supplémentaire — pas fait par défaut
-   pour rester minimal.
